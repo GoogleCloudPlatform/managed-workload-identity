@@ -20,8 +20,6 @@ option java_multiple_files = true;
 
 message GetWorkloadTrustBundlesRequest {}
 
-message GetWorkloadTrustBundlesRequest {}
-
 message GetWorkloadTrustBundlesResponse {
   // The json formatted collection of SPIFFE trust bundles object represented as
   // a JWK Set and keyed by the trust domain name as described in
