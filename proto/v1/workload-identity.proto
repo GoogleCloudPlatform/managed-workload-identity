@@ -1,0 +1,59 @@
+// Copyright 2025 Google LLC
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// 
+//     https://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+syntax = "proto3";
+
+package managed_workload_identity.proto.v1;
+
+option java_multiple_files = true;
+
+message GetWorkloadTrustBundlesRequest {}
+
+message GetWorkloadTrustBundlesRequest {}
+
+message GetWorkloadTrustBundlesResponse {
+  // The json formatted collection of SPIFFE trust bundles object represented as
+  // a JWK Set and keyed by the trust domain name as described in
+  // https://github.com/spiffe/spiffe/blob/main/standards/SPIFFE_Trust_Domain_and_Bundle.md
+  bytes spiffe_trust_bundles_map_json = 1;
+}
+
+message GetWorkloadCertificatesRequest {}
+
+message GetWorkloadCertificatesResponse {
+  // The PEM-encoded certificate chain ordered from leaf to root,
+  // excluding the root.
+  //
+  // The leaf certificate is an SVID that contains a SPIFFE id in the URI SAN.
+  // Each subsequent certificate will be an intermediate certificate that signs
+  // the preceding certificate.
+  bytes certificate_chain_pem = 1;
+
+  // The PEM-encoded private key corresponding to the leaf certificate in the
+  // certificate chain.
+  bytes private_key_pem = 2;
+}
+
+service WorkloadIdentity {
+  // Returns the SPIFFE trust bundles map containing trust domains and their
+  // corresponding cryptographic keys used for validating X.509-SVID(s).
+  rpc GetWorkloadTrustBundles(GetWorkloadTrustBundlesRequest)
+      returns (GetWorkloadTrustBundlesResponse) {}
+
+  // Returns the certificate chain containing the X.509-SVID for the SPIFFE
+  // identity assigned to the workload that the client can use for TLS
+  // handshake.
+  rpc GetWorkloadCertificates(GetWorkloadCertificatesRequest)
+      returns (GetWorkloadCertificatesResponse) {}
+}
